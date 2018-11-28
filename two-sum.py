@@ -5,9 +5,10 @@ class Solution(object):
         :type target: int
         :rtype: List[int]
         """
-    map = {}
-    for i, v in enumerate(nums):
-        complement = target - v
-        if complement in map:
-            return [map[complement], i]
-        map[v] = i
+        # https://leetcode.com/articles/two-sum/#approach-3-one-pass-hash-table
+        indices = {}  # number (key) and its index (value)
+        for i, v in enumerate(nums):
+            complement = target - v
+            if complement in indices:
+                return [indices[complement], i]
+            indices[v] = i
