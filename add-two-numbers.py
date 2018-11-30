@@ -21,9 +21,9 @@ class Solution:
             l1 = next_(l1)
             l2 = next_(l2)
             carry = sum_ // 10
-            curr.next = ListNode(carry) # Created without condition l1 or l2 or carry
+            curr.next = ListNode(carry)  # Created without condition l1 or l2 or carry
             prev = curr
             curr = curr.next
         if curr.val == 0:
-            prev.next = None # then have to trim the tail
+            prev.next = None  # then have to trim the tail
         return head
