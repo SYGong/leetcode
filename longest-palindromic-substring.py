@@ -6,14 +6,17 @@ class Solution:
         """
         max_left, max_len = 0, 0
 
-        def expand_to(p_left, p_right):
-            if p_left >= 0 and p_right < len(s) and s[p_left] == s[p_right]:                                
-                expand_to(p_left - 1, p_right + 1)
+        def expand_to(ex_l, ex_r):
+            # left/right pointer
+            if (ex_l >= 0 
+                    and ex_r < len(s)                    
+                    and s[ex_l] == s[ex_r]):
+                expand_to(ex_l - 1, ex_r + 1)
             else:
-                pal_len = p_right - p_left - 1
+                pal_len = ex_r - ex_l - 1
                 nonlocal max_left, max_len
                 if max_len < pal_len:
-                    max_left = p_left + 1
+                    max_left = ex_l + 1
                     max_len = pal_len
 
         for i in range(len(s)):
