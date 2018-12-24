@@ -15,23 +15,17 @@ class Solution:
         for i, v in enumerate(nums):
             if num_freq[v] >= 2:
                 if v * 3 == TARGET and num_freq[v] >= 3:
-                    triplets.appned([v] * 3)
-                    break
+                    triplets.append([v] * 3)
                 else:
                     complement = TARGET - 2 * v
-                    if complement in num_freq:
+                    if complement in num_freq and complement != v:
                         triplets.append([v] * 2 + [complement])
-            elif v < 0:
+            if v * 3 < TARGET:
                 two_sum = TARGET - v
-                incre = i + 1
-                decre = len(nums) - 1 
-                while incre < decre and 2 * nums[incre] <= two_sum and 2 * nums[decre] >= two_sum:
-                    if nums[incre] + nums[decre] == two_sum:
-                        triplets.append([v, nums[incre], nums[decre]])
-                        incre += 1
-                        decre -= 1
-                    elif nums[incre] + nums[decre] > two_sum:
-                        decre -= 1
-                    else:
-                        incre += 1
+                for u in nums[i + 1 : -1]:
+                    if 2 * u >= two_sum:
+                        break
+                    complement = two_sum - u
+                    if complement in num_freq:
+                        triplets.append([v, u, complement])
         return triplets
