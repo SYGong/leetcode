@@ -22,18 +22,29 @@ class Solution:
 
         max_num = nums[-1]
         for i, v in enumerate(nums):
+
             if num_freq[v] >= 2:
                 complement =  -2 * v
                 if complement in num_freq:
                     if complement != v or num_freq[v] >= 3:
                         triplets.append([v] * 2 + [complement])
-            if v < 0:
+
+            # When all 3 numbers are different
+            if v < 0:  # only when v is smallest of 3 differnt numbers
                 two_sum = -v
+
+                # lower bound for the smaller of remaining two
                 lb = bisect_left(nums, two_sum - max_num, i + 1)
-                ub = bisect(nums, two_sum // 2, lb)
-                # lower/up bound        
-                for u in nums[lb : ub]:
-                    complement = two_sum - u
-                    if complement in num_freq and u != complement:
-                        triplets.append([v, u, complement])
+                # upper bound of the greater of remaining two
+                ub = min(bisect(nums, two_sum - nums[lb], lb + 1), len(nums) - 1)
+                       
+                while lb < ub:
+                    if nums[lb] + nums[ub] == two_sum:
+                        triplets.append([v, nums[lb], nums[ub]])
+                        lb += 1
+                        ub -= 1
+                    elif nums[lb] + nums[ub] > two_sum:
+                        ub -= 1
+                    else:
+                        lb += 1
         return triplets
