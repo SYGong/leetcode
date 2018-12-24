@@ -11,9 +11,10 @@ class Solution:
         if len(nums) < 3:
             return triplets
         num_freq = Counter(nums)
-        nums = sorted(num_freq)
-        # unique numbers in ascending order
+        nums = sorted(num_freq)  # sorted unique numbers
         
+        # Get rid of numbers that are too large/small
+        # such that no other number able to complete
         nums = nums[bisect_left(nums, -2 * nums[-1]) :
                     bisect(nums, -2 * nums[0])]
         if len(nums) < 1:
@@ -22,11 +23,9 @@ class Solution:
         max_num = nums[-1]
         for i, v in enumerate(nums):
             if num_freq[v] >= 2:
-                if v == 0 and num_freq[v] >= 3:
-                    triplets.append([v] * 3)
-                else:
-                    complement =  -2 * v
-                    if complement in num_freq and complement != v:
+                complement =  -2 * v
+                if complement in num_freq:
+                    if complement != v or num_freq[v] >= 3:
                         triplets.append([v] * 2 + [complement])
             if v < 0:
                 two_sum = -v
