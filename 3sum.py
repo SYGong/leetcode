@@ -12,7 +12,7 @@ class Solution:
         # unique numbers in ascending order
 
         triplets = []
-        for i, v in enumerate(nums)):
+        for i, v in enumerate(nums):
             if num_freq[v] >= 2:
                 if v * 3 == TARGET and num_freq[v] >= 3:
                     triplets.appned([v] * 3)
@@ -27,7 +27,7 @@ class Solution:
                 decre = len(nums) - 1 
                 while incre < decre and 2 * nums[incre] <= two_sum and 2 * nums[decre] >= two_sum:
                     if nums[incre] + nums[decre] == two_sum:
-                        triplets.append([nums[i], nums[incre], nums[decre]])
+                        triplets.append([v, nums[incre], nums[decre]])
                         incre += 1
                         decre -= 1
                     elif nums[incre] + nums[decre] > two_sum:
