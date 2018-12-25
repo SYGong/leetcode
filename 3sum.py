@@ -14,11 +14,9 @@ class Solution:
         triplets = []
         for i, v in enumerate(nums):
             if num_freq[v] >= 2:
-                if v * 3 == TARGET and num_freq[v] >= 3:
-                    triplets.append([v] * 3)
-                else:
-                    complement = TARGET - 2 * v
-                    if complement in num_freq and complement != v:
+                complement =  TARGET - 2 * v
+                if complement in num_freq:
+                    if complement != v or num_freq[v] >= 3:
                         triplets.append([v] * 2 + [complement])
             if v * 3 < TARGET:
                 two_sum = TARGET - v
