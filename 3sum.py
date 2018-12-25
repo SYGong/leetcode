@@ -27,11 +27,15 @@ class Solution:
                 if complement in num_freq:
                     if complement != v or num_freq[v] >= 3:
                         triplets.append([v] * 2 + [complement])
-            if v < 0:
+
+            # When all 3 numbers are different
+            if v < 0:  # only when v is smallest
                 two_sum = -v
+
+                # lower/up bound of the smaller of remaining two
                 lb = bisect_left(nums, two_sum - max_num, i + 1)
                 ub = bisect(nums, two_sum // 2, lb)
-                # lower/up bound        
+                       
                 for u in nums[lb : ub]:
                     complement = two_sum - u
                     if complement in num_freq and u != complement:
