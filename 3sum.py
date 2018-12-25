@@ -1,29 +1,43 @@
+from collections import Counter
+from bisect import bisect, bisect_left
+
 class Solution:
     def threeSum(self, nums):
         """
         :type nums: List[int]
         :rtype: List[List[int]]
         """
-        nums = sorted(nums)
         triplets = []
-        for i in range(len(nums)):
-            if nums[i] <= 0 and (i == 0 or nums[i] != nums[i - 1]):
-                two_sum = -nums[i]
-                incre = i + 1
-                decre = len(nums) - 1 
-                while incre < decre and 2 * nums[incre] <= two_sum and 2 * nums[decre] >= two_sum:
-                    if nums[incre] + nums[decre] == two_sum:
-                        triplets.append([nums[i], nums[incre], nums[decre]])
-                        if nums[incre] == nums[decre]:
-                            break
-                        incre += 1
-                        decre -= 1
-                        while incre < decre and nums[incre - 1] == nums[incre]:
-                            incre += 1
-                        while incre < decre and nums[decre + 1] == nums[decre]:
-                            decre -= 1
-                    elif nums[incre] + nums[decre] > two_sum:
-                        decre -= 1
-                    else:
-                        incre += 1
+        if len(nums) < 3:
+            return triplets
+        num_freq = Counter(nums)
+        nums = sorted(num_freq)  # sorted unique numbers
+        
+        # Get rid of numbers that are too large/small
+        # such that no other number able to complete
+        nums = nums[bisect_left(nums, -2 * nums[-1]) :
+                    bisect(nums, -2 * nums[0])]
+        if len(nums) < 1:
+            return triplets
+
+        max_num = nums[-1]
+        for i, v in enumerate(nums):
+            if num_freq[v] >= 2:
+                complement =  -2 * v
+                if complement in num_freq:
+                    if complement != v or num_freq[v] >= 3:
+                        triplets.append([v] * 2 + [complement])
+
+            # When all 3 numbers are different
+            if v < 0:  # only when v is smallest
+                two_sum = -v
+
+                # lower/up bound of the smaller of remaining two
+                lb = bisect_left(nums, two_sum - max_num, i + 1)
+                ub = bisect(nums, two_sum // 2, lb)
+                       
+                for u in nums[lb : ub]:
+                    complement = two_sum - u
+                    if complement in num_freq and u != complement:
+                        triplets.append([v, u, complement])
         return triplets
