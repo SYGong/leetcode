@@ -34,7 +34,7 @@ class Solution:
                 two_sum = -v
 
                 # lower bound for the smaller of remaining two
-                lb = bisect_left(nums, two_sum - max_num, i + 1)
+                lb = max(bisect_left(nums, two_sum - max_num, i + 1), len(nums) - 1)
                 # upper bound of the greater of remaining two
                 ub = min(bisect(nums, two_sum - nums[lb], lb + 1), len(nums) - 1)
                        
