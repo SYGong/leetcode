@@ -1,3 +1,9 @@
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
 class Solution:
     def addTwoNumbers(self, l1, l2):
         """
@@ -5,27 +11,34 @@ class Solution:
         :type l2: ListNode
         :rtype: ListNode
         """
-        dummy = ListNode(0)
-        dummy.next = l1
-        pre = dummy
-        carry = 0
+        dummy = ListNode(-1)
+        cur = dummy
+        exceed_ten = False
         while l1 and l2:
-            carry += l1.val+l2.val
-            l1.val = carry % 10
-            carry = carry // 10
-            l1 = l1.next
-            l2 = l2.next
-            pre = pre.next
-        if l1:
-            pre.next = l1
-        elif l2:
-            pre.next = l2
-        while pre and pre.next:
-            carry += pre.next.val
-            pre.next.val = carry % 10
-            carry = carry // 10
-            pre = pre.next
-        if carry:
-            pre.next = ListNode(carry)
+            sum_two = l1.val + l2.val
+            if exceed_ten:
+                sum_two += 1
+                exceed_ten = False
+            if sum_two >= 10:
+                exceed_ten = True
+            cur.next = ListNode(sum_two % 10)
+            cur = cur.next
+            l1, l2 = l1.next, l2.next
+        
+        while l1 or l2:
+            val = l1.val if l1 else l2.val
+            if exceed_ten:
+                val += 1
+                exceed_ten = False
+            if val == 10:
+                val = 0
+                exceed_ten = True
+            cur.next = ListNode(val)
+            cur = cur.next
+            if l1:
+                l1 = l1.next
+            else:
+                l2 = l2.next
+        if exceed_ten:
+            cur.next = ListNode(1)
         return dummy.next
-            
