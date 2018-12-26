@@ -1,43 +1,33 @@
-from collections import Counter
-from bisect import bisect, bisect_left
-
 class Solution:
     def threeSum(self, nums):
         """
         :type nums: List[int]
         :rtype: List[List[int]]
         """
-        triplets = []
-        if len(nums) < 3:
-            return triplets
-        num_freq = Counter(nums)
-        nums = sorted(num_freq)  # sorted unique numbers
+        if not nums:
+            return []
         
-        # Get rid of numbers that are too large/small
-        # such that no other number able to complete
-        nums = nums[bisect_left(nums, -2 * nums[-1]) :
-                    bisect(nums, -2 * nums[0])]
-        if len(nums) < 1:
-            return triplets
-
-        max_num = nums[-1]
-        for i, v in enumerate(nums):
-            if num_freq[v] >= 2:
-                complement =  -2 * v
-                if complement in num_freq:
-                    if complement != v or num_freq[v] >= 3:
-                        triplets.append([v] * 2 + [complement])
-
-            # When all 3 numbers are different
-            if v < 0:  # only when v is smallest
-                two_sum = -v
-
-                # lower/up bound of the smaller of remaining two
-                lb = bisect_left(nums, two_sum - max_num, i + 1)
-                ub = bisect(nums, two_sum // 2, lb)
-                       
-                for u in nums[lb : ub]:
-                    complement = two_sum - u
-                    if complement in num_freq and u != complement:
-                        triplets.append([v, u, complement])
-        return triplets
+        freq = {}
+        for num in nums:
+            freq[num] = freq.get(num, 0) + 1
+        pos = [p for p in freq if p > 0]
+        neg = [n for n in freq if n < 0]
+        
+        if 0 in freq and freq[0] > 2:
+            ans = [[0,0,0]]
+        else: 
+            ans = []
+        
+        for p in pos:
+            for n in neg:
+                s = - (p+n)
+                if s in freq:
+                    if s == p and freq[p] > 1:
+                        ans.append([n,s,p])
+                    if s == n and freq[n] > 1:
+                        ans.append([n,s,p])
+                    elif s < p and s > n:
+                        ans.append([n,s,p])
+                        
+                        
+        return ans
