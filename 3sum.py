@@ -11,7 +11,7 @@ class Solution:
         if len(nums) < 3:
             return triplets
         num_freq = Counter(nums)
-        nums = sorted(num_freq)  # sorted unique numbers
+        nums = sorted(num_freq)  # Sorted unique numbers
         
         # Get rid of numbers that are too large/small
         # such that no other number able to complete
@@ -32,7 +32,7 @@ class Solution:
             if v < 0:  # only when v is smallest
                 two_sum = -v
 
-                # lower/up bound of the smaller of remaining two
+                # Lower/upper bound of the smaller of remaining two
                 lb = bisect_left(nums, two_sum - max_num, i + 1)
                 ub = bisect(nums, two_sum // 2, lb)
                        
