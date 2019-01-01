@@ -1,4 +1,4 @@
-from bisect import bisect, bisect_left
+from bisect import bisect_left
 
 class Solution:
     def fourSum(self, nums, target):
@@ -7,8 +7,9 @@ class Solution:
         :type target: int
         :rtype: List[List[int]]
         """
+        N = 4
         quadruplets = []
-        if len(nums) < 4:
+        if len(nums) < N:
             return quadruplets
         nums = sorted(nums)
         quadruplet = []
@@ -16,17 +17,13 @@ class Solution:
         # Let top[i] be the sum of largest i numbers. Go to 
         # https://siyuangong.com/projects/#leetcode for other
         # solutions, analysis and updates. 
-        top = [
-            0,
-            nums[-1],
-            nums[-1] + nums[-2],
-            nums[-1] + nums[-2] + nums[-3]            
-        ]
+        top = [0]       
+        for i in range(1, N):
+            top.append(top[i - 1] + nums[-i])     
 
-        # Find range of the least number in curr_n 
-        # (0, 1, 2, 3 or 4) numbers that sum up to curr_target,
-        # then find range of 2nd least number and so on by 
-        # recursion. Go to 
+        # Find range of the least number in curr_n (0,...,N)
+        # numbers that sum up to curr_target, then find range of
+        # 2nd least number and so on by recursion. Go to
         # https://siyuangong.com/projects/#leetcode for other
         # solutions, analysis and updates. 
         def sum_(curr_target, curr_n, lo=0):
@@ -51,5 +48,5 @@ class Solution:
                     sum_(next_target, next_n, i + 1)
                     quadruplet.pop()
 
-        sum_(target, 4)
+        sum_(target, N)
         return quadruplets
