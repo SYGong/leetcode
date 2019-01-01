@@ -1,4 +1,3 @@
-from collections import Counter
 from bisect import bisect, bisect_left
 
 class Solution:
@@ -8,36 +7,46 @@ class Solution:
         :rtype: List[List[int]]
         """
         triplets = []
-        if len(nums) < 3:
+        if len(nums) < N:
             return triplets
-        num_freq = Counter(nums)
-        nums = sorted(num_freq)  # Sorted unique numbers
-        
-        # Get rid of numbers that are too large/small
-        # such that no other number able to complete
-        nums = nums[bisect_left(nums, -2 * nums[-1]) :
-                    bisect(nums, -2 * nums[0])]
-        if len(nums) < 1:
-            return triplets
+        nums = sorted(nums)
+        triplet = []
 
-        max_num = nums[-1]
-        for i, v in enumerate(nums):
-            if num_freq[v] >= 2:
-                complement =  -2 * v
-                if complement in num_freq:
-                    if complement != v or num_freq[v] >= 3:
-                        triplets.append([v] * 2 + [complement])
+        # Let top[i] be the sum of largest i numbers. Go to 
+        # https://siyuangong.com/projects/#leetcode for other
+        # solutions, analysis and updates. 
+        top = [
+            0,
+            nums[-1],
+            nums[-1] + nums[-2]           
+        ]
 
-            # When all 3 numbers are different
-            if v < 0:  # only when v is smallest
-                two_sum = -v
+        # Find range of the least number in curr_n (0,...,N)
+        # numbers that sum up to curr_target, then find range of
+        # 2nd least number and so on by recursion. Go to 
+        # https://siyuangong.com/projects/#leetcode for other
+        # solutions, analysis and updates. 
+        def sum_(curr_target, curr_n, lo=0):
+            if curr_n == 0:
+                if curr_target == 0:
+                    triplets.append(triplet[:])
+                return
+            
+            next_n = curr_n - 1
+            max_i = len(nums) - curr_n
+            max_i = bisect_left(
+                nums, curr_target // curr_n,
+                lo, max_i)
+            min_i = bisect_left(
+                nums, curr_target - top[next_n],
+                lo, max_i)
 
-                # Lower/upper bound of the smaller of remaining two
-                lb = bisect_left(nums, two_sum - max_num, i + 1)
-                ub = bisect(nums, two_sum // 2, lb)
-                       
-                for u in nums[lb : ub]:
-                    complement = two_sum - u
-                    if complement in num_freq and u != complement:
-                        triplets.append([v, u, complement])
+            for i in range(min_i, max_i + 1): 
+                if i == min_i or nums[i] != nums[i - 1]:
+                    triplet.append(nums[i])
+                    next_target = curr_target - nums[i]
+                    sum_(next_target, next_n, i + 1)
+                    triplet.pop()
+
+        sum_(0, N)
         return triplets
