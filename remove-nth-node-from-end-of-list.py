@@ -21,9 +21,6 @@ class Solution:
                 Np1th_from_curr = Np1th_from_curr.next
         if n > 0:
             head = head.next
-            return head
         else:
-            Np1th_from_curr.next =  Np1th_from_curr.next.next
-            return head
-        
-            
+            Np1th_from_curr.next = Np1th_from_curr.next.next
+        return head
