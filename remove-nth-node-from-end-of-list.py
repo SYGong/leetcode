@@ -13,14 +13,12 @@ class Solution:
         """
         Np1th_from_curr = head
         curr_node = head
+        for i in range(n):
+            curr_node = curr_node.next
+        if not curr_node:
+            return head.next
         while curr_node.next:
             curr_node = curr_node.next
-            if n > 0:
-                n -= 1
-            else:
-                Np1th_from_curr = Np1th_from_curr.next
-        if n > 0:
-            head = head.next
-        else:
-            Np1th_from_curr.next = Np1th_from_curr.next.next
+            Np1th_from_curr = Np1th_from_curr.next
+        Np1th_from_curr.next = Np1th_from_curr.next.next
         return head
