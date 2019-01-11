@@ -16,10 +16,12 @@ class Solution:
         nums = sorted(nums)
 
         for i, v in enumerate(nums):
-            for j, w in enumerate(nums[1+1:]):
-                sum_ = v + w
-                sum_pairs.setdefault(sum_, [])
-                sum_pairs[sum_].append(i, j)
+            if i >= 1 and v != nums[i - 1]:
+                for j, w in enumerate(nums[1+1:]):
+                    if w != nums[j - 1]:
+                        sum_ = v + w
+                        sum_pairs.setdefault(sum_, [])
+                        sum_pairs[sum_].append((i, j)
 
         # Let top[i] be the sum of largest i numbers. Go to 
         # https://siyuangong.com/projects/#leetcode for other
