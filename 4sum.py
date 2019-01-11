@@ -1,4 +1,5 @@
 from bisect import bisect_left
+from collections import Counter
 
 class Solution:
     def fourSum(self, nums, target):
@@ -7,12 +8,18 @@ class Solution:
         :type target: int
         :rtype: List[List[int]]
         """
+        sum_pairs = {}
         N = 4
         quadruplets = []
         if len(nums) < N:
             return quadruplets
         nums = sorted(nums)
-        quadruplet = []
+
+        for i, v in enumerate(nums):
+            for j, w in enumerate(nums[1+1:]):
+                sum_ = v + w
+                sum_pairs.setdefault(sum_, [])
+                sum_pairs[sum_].append(i, j)
 
         # Let top[i] be the sum of largest i numbers. Go to 
         # https://siyuangong.com/projects/#leetcode for other
