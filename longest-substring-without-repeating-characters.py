@@ -4,16 +4,15 @@ class Solution:
         :type s: str
         :rtype: int
         """
-        "dvdf  3"
-        
-       
-        dic=[-1]*256 
-        maxLen = 0
-        start = -1;
-        for i,e in enumerate(s):
-            if (dic[ord(e)] > start):
-                start = dic[ord(e)]
-            dic[ord(e)] = i;
-            maxLen = max(maxLen, i - start);
-        
-        return maxLen;
+        sub_start = 0
+        char_index = {}
+        max_len = 0
+        for i, c in enumerate(s):
+            if c in char_index and char_index[c] >= sub_start:
+                sub_start = char_index[c] + 1
+                if len(s) - sub_start < max_len:
+                    break
+            else:
+                max_len = max(i - sub_start + 1, max_len)
+            char_index[c] = i            
+        return max_len
